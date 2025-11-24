@@ -1,0 +1,405 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/lx.blogs/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/lx.blogs/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="lx blog" href="https://love-lx-love.github.io/lx.blogs/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="lx blog" href="https://love-lx-love.github.io/lx.blogs/atom.xml" />
+<link rel="alternate" type="application/json" title="lx blog" href="https://love-lx-love.github.io/lx.blogs/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/lx.blogs/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="网络安全,攻击,防御,单包攻击" />
+
+
+<link rel="canonical" href="https://love-lx-love.github.io/lx.blogs/2025/11/24/25.11.24/">
+
+
+
+  <title>
+扫描窥探攻击、畸形报文攻击、特殊报文攻击 |
+welcome to my blog = lx blog = 路漫漫其修远兮</title>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">扫描窥探攻击、畸形报文攻击、特殊报文攻击
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2025-11-24 13:38:44">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2025-11-24T13:38:44+08:00">2025-11-24</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/lx.blogs/" rel="start">welcome to my blog</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="/lx.blogs/images/bg/5.jpg"></li>
+          <li class="item" data-background-image="/lx.blogs/images/bg/2.jpg"></li>
+          <li class="item" data-background-image="/lx.blogs/images/bg/6.jpg"></li>
+          <li class="item" data-background-image="/lx.blogs/images/bg/1.jpg"></li>
+          <li class="item" data-background-image="/lx.blogs/images/bg/4.jpg"></li>
+          <li class="item" data-background-image="/lx.blogs/images/bg/9.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/lx.blogs/">首页</a></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="https://love-lx-love.github.io/lx.blogs/2025/11/24/25.11.24/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/lx.blogs/images/avatar.jpg">
+    <meta itemprop="name" content="lx_love">
+    <meta itemprop="description" content="路漫漫其修远兮, welcome to my blog">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="lx blog">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <p><img data-src="/lx.blogs/images%5Cblogs%5C25.11.24%5C%E5%8D%95%E5%8C%85%E6%94%BB%E5%87%BB.png" alt="单包攻击"><br><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ1MDIyMDczL2FydGljbGUvZGV0YWlscy8xMzUyOTY0NDAjdDIw">文章来源</span></p>
+<h1 id="一、扫描窥探攻击"><a href="#一、扫描窥探攻击" class="headerlink" title="一、扫描窥探攻击"></a>一、扫描窥探攻击</h1><h2 id="1-地址扫描攻击"><a href="#1-地址扫描攻击" class="headerlink" title="1.地址扫描攻击"></a>1.地址扫描攻击</h2><h3 id="攻击介绍"><a href="#攻击介绍" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>攻击者通过发送多个包含不同目标IP地址的ICMP&#x2F;TCP&#x2F;UDP报文，来探查目标主机是否存在。</p>
+<h3 id="防御措施"><a href="#防御措施" class="headerlink" title="防御措施"></a>防御措施</h3><p>检测进入防火墙的ICMP、TCP和UDP报文，根据源IP地址获取统计表项的索引，如果目的IP地址与前一报文的IP地址不同，则将表项中的总报文个数增加1。如果在一定时间内报文的个数达到设置的阑值，记录日志，并根据配置决定是否将源IP地址自动加入黑名单。</p>
+<h2 id="2-端口扫描攻击"><a href="#2-端口扫描攻击" class="headerlink" title="2.端口扫描攻击"></a>2.端口扫描攻击</h2><h3 id="攻击介绍-1"><a href="#攻击介绍-1" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>攻击者通关对主机的各个端口发送TCP&#x2F;UDP报文，根据应答报文判断端口是否开放。</p>
+<h3 id="防御措施-1"><a href="#防御措施-1" class="headerlink" title="防御措施"></a>防御措施</h3><p>检测进入防火墙的TCP和UDP报文，根据源IP地址获取统计表项的索引，如果目的端口号与前一报文的端口号不同，则将表项中的总报文个数增加1。如果在一定时间内报文的个数达到设置的阑值，记录日志，并根据配置决定是否将源IP地址自动加入黑名单。</p>
+<h1 id="二、畸形报文攻击"><a href="#二、畸形报文攻击" class="headerlink" title="二、畸形报文攻击"></a>二、畸形报文攻击</h1><h2 id="1-Sumrf攻击"><a href="#1-Sumrf攻击" class="headerlink" title="1.Sumrf攻击"></a>1.Sumrf攻击</h2><h3 id="攻击介绍-2"><a href="#攻击介绍-2" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>Sumrf攻击是一种利用ICMP协议的攻击，攻击者通关设置报文目标地址为对端广播地址，源地址为服务器地址，改网络的所有主机将会回应该ICMP报文，导致回应全部发往服务器，导致网络服务器不能正常访问或者无法正常提供服务。</p>
+<h3 id="防御措施-2"><a href="#防御措施-2" class="headerlink" title="防御措施"></a>防御措施</h3><p>检查ICMP应答请求包的目的地址是否为子网广播地址或子网的网络地址，如果是，则直接拒绝，并将攻击记录到日志。</p>
+<h2 id="2-LAND攻击"><a href="#2-LAND攻击" class="headerlink" title="2.LAND攻击"></a>2.LAND攻击</h2><h3 id="攻击介绍-3"><a href="#攻击介绍-3" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>将TCP的源地址与目标地址都设置成受害者的IP地址，导致受害者往自己的地址发送SYN-ACK消息，结果这个地址又发送回ACK消息并创建一个与自己的空连接，占用系统资源或使系统崩溃。</p>
+<h3 id="防御措施-3"><a href="#防御措施-3" class="headerlink" title="防御措施"></a>防御措施</h3><p>对每一个的IP报文进行检测，若其源地址与目的地址相同，或者源地址为环回地址（127.0.0.1），则直接拒绝，并将攻击记录到日志。</p>
+<h2 id="3-Fraggle攻击"><a href="#3-Fraggle攻击" class="headerlink" title="3.Fraggle攻击"></a>3.Fraggle攻击</h2><h3 id="攻击介绍-4"><a href="#攻击介绍-4" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>Fraggle攻击类似于Smurf攻击，使用UDP应答消息而非ICMP。UDP端口7（ECHO）和端口19（Chargen）在收到UDP报文后，会产生大量无用的应答报文，占满网络带宽。<br>该攻击的原理是利用UDP协议的无连接性，攻击者发送一个UDP报文到目标主机的端口7或19，这两个端口会产生大量的无用应答报文，占满网络带宽。<br><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dka2lyY2hob2ZmL2FydGljbGUvZGV0YWlscy80NTU2MDY1NQ==">7、19端口的UDP攻击</span></p>
+<h3 id="防御措施-4"><a href="#防御措施-4" class="headerlink" title="防御措施"></a>防御措施</h3><p>检查进入防火墙的UDP报文，若目的端口号为7或19，则直接拒绝，并将攻击记录到日志，否则允许通过。</p>
+<h2 id="4-IP-Fragment攻击"><a href="#4-IP-Fragment攻击" class="headerlink" title="4.IP Fragment攻击"></a>4.IP Fragment攻击</h2><h3 id="攻击介绍-5"><a href="#攻击介绍-5" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>IP报文中有几个字段与分片有关：DF位、MF位、Fragment offsetLength 。如果上述字段的值出现矛盾，而设备处理不当，会对设备造成一定的影响，甚至瘫痪。</p>
+<h3 id="防御措施-5"><a href="#防御措施-5" class="headerlink" title="防御措施"></a>防御措施</h3><p>检查IP报文中与分片有关的字段（DF位、MF位、片偏置量、总长度）是否有以下矛盾，若发现含有以下矛盾，则丢弃。将攻击记录到日志：<br>DF位为1，而MF位也为1或Fragment Offset不为0。<br>DF位为0，而Fragment Offset + Length &gt; 65535。<br>DF不要分片、MF要分片偏移量。</p>
+<h2 id="5-IP-Spoofing攻击防范"><a href="#5-IP-Spoofing攻击防范" class="headerlink" title="5.IP Spoofing攻击防范"></a>5.IP Spoofing攻击防范</h2><h3 id="攻击介绍-6"><a href="#攻击介绍-6" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>为了获得访问权，或隐藏入侵者的身份信息，入侵者生成带有伪造源地址的报文，并使用该伪造源地址访问攻击目标，进行扫描、窥探等预备攻击。</p>
+<h3 id="防御措施-6"><a href="#防御措施-6" class="headerlink" title="防御措施"></a>防御措施</h3><p>检测每个接口流入的IP报文的源地址与目的地址，并对报文的源地址反查路由表，入接口与以该IP地址为目的地址的最佳出接口不相同的IP报文被视为IP Spoofing攻击，将被拒绝，并进行日志记录。<br>一台主机X去访问Y，正常路由器收到报文是根据目的路由去查路由表，也就是路由表中查去往Y的路由，不关心去往源X的，启用了IP Spoofing防护之后，X去往Y的路由从Eth1口收到后，不但会查路由表去往Y怎么走，还会反向查询路由表去往X是否是从Eth1口学到，如果X路由是从其他接口学到或者是根本没有X路由就会把这个访问干掉。</p>
+<h2 id="6-Ping-of-Death攻击"><a href="#6-Ping-of-Death攻击" class="headerlink" title="6.Ping of Death攻击"></a>6.Ping of Death攻击</h2><h3 id="攻击介绍-7"><a href="#攻击介绍-7" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>IP报文的长度字段为16位，即IP报文的最大长度为65535 B。Ping of Death利用一些长度超大的ICMP报文对系统进行攻击。</p>
+<h3 id="防御措施-7"><a href="#防御措施-7" class="headerlink" title="防御措施"></a>防御措施</h3><p>检测ICMP请求报文长度是否超过65535 B，若超过，则丢弃报文并记录日志。</p>
+<h2 id="7-TCP-Flag攻击"><a href="#7-TCP-Flag攻击" class="headerlink" title="7.TCP Flag攻击"></a>7.TCP Flag攻击</h2><h3 id="攻击介绍-8"><a href="#攻击介绍-8" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>TCP报文包含6个标志位：URG、ACK、PSH、RST、SYN、FIN ，（最经典的标志位：ACK、RST、SYN、FIN）不同的系统对这些标志位组合的应答是不同的，可用于操作系统探测。</p>
+<h3 id="防御措施-8"><a href="#防御措施-8" class="headerlink" title="防御措施"></a>防御措施</h3><p>检查TCP报文的各个标志位，若出现以下任意一种情况，直接丢弃该报文并记录日志<br>6个标志位全为1或6个标志位全为0。<br>SYN和FIN位同时为1；SYN和RST同时为1。<br>FIN和URQ同时为1，RST和FIN同时为1。</p>
+<h2 id="8-Teardrop攻击"><a href="#8-Teardrop攻击" class="headerlink" title="8.Teardrop攻击"></a>8.Teardrop攻击</h2><h3 id="攻击介绍-9"><a href="#攻击介绍-9" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>利用在TCP&#x2F;IP堆栈中信任IP碎片报文头所包含的信息实现。</p>
+<h3 id="防御措施-9"><a href="#防御措施-9" class="headerlink" title="防御措施"></a>防御措施</h3><p>缓存分片信息，每一个源地址、目的地址、分片ID相同的为一组，最大支持缓存10000组分片信息。</p>
+<h2 id="9-WinNuke攻击范围防范"><a href="#9-WinNuke攻击范围防范" class="headerlink" title="9.WinNuke攻击范围防范"></a>9.WinNuke攻击范围防范</h2><h3 id="攻击介绍-10"><a href="#攻击介绍-10" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>WinNuke攻击通常向装有Windows系统的特定目标的NetBIOS端口（139）发送000B（out-of-band）数据包，引起一个NetBIOS片断重叠，致使已与其他主机建立连接的目标主机崩溃。还有一种是IGMP分片报文，一般情况下，IGMP报文是不会分片的，所以，不少系统对IGMP分片报文的处理有问题。<br>防御方法<br>WinNuke攻击1：检测数据包目的端口是否为139，并且检查TCP-URG位是否被设0置。<br>WinNuke攻击2：检测进入的IGMP报文是否为分片报文，如果是分片报文，则直接丢弃。</p>
+<h3 id="防御措施-10"><a href="#防御措施-10" class="headerlink" title="防御措施"></a>防御措施</h3><p>WinNuke攻击1：检测数据包目的端口是否为139，并且检查TCP-URG位是否被设0置。<br>WinNuke攻击2：检测进入的IGMP报文是否为分片报文，如果是分片报文，则直接丢弃。</p>
+<h1 id="三、特殊报文攻击"><a href="#三、特殊报文攻击" class="headerlink" title="三、特殊报文攻击"></a>三、特殊报文攻击</h1><h2 id="1-超大ICMP报文攻击"><a href="#1-超大ICMP报文攻击" class="headerlink" title="1.超大ICMP报文攻击"></a>1.超大ICMP报文攻击</h2><h3 id="攻击介绍-11"><a href="#攻击介绍-11" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>特殊报文攻击是指利用一些特殊的报文对目标系统进行攻击。例如，超大ICMP报文攻击、ICMP不可达报文攻击、Tracert报文攻击等。</p>
+<h3 id="防御措施-11"><a href="#防御措施-11" class="headerlink" title="防御措施"></a>防御措施</h3><p>用户可以根据实际网络需要配置允许通过的ICMP报文的最大长度，当实际ICMP报文的长度超过该值时，防火墙认为发生了超大ICMP报文攻击将丢弃该报文。</p>
+<h2 id="2-ICMP不可达报文攻击防范"><a href="#2-ICMP不可达报文攻击防范" class="headerlink" title="2.ICMP不可达报文攻击防范"></a>2.ICMP不可达报文攻击防范</h2><h3 id="攻击介绍-12"><a href="#攻击介绍-12" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>不同的系统对ICMP不可达报文的处理方式不同，有的系统在收到网络或主机不可达的ICMP报文后，对后续发往此目的地址的报文直接认为不可达，从而切断了目的地与主机的连接。攻击者利用这一点，伪造不可达ICMP报文，切断受害者与目的地的连接，造成攻击。<br>防御方法<br>启动ICMP不可达报文攻击防范功能，防火墙对ICMP不可达报文进行丢弃并记录攻击日志。</p>
+<h2 id="3-Tracert报文攻击防范"><a href="#3-Tracert报文攻击防范" class="headerlink" title="3.Tracert报文攻击防范"></a>3.Tracert报文攻击防范</h2><h3 id="攻击介绍-13"><a href="#攻击介绍-13" class="headerlink" title="攻击介绍"></a>攻击介绍</h3><p>Tracert报文攻击是攻击者利用TTL为0时返回的ICMP超时报文，和达到目的地址时返回的ICMP端口不可达报文来发现报文到达目的地所经过的路径，它可以窥探网络的结构。</p>
+<h3 id="防御措施-12"><a href="#防御措施-12" class="headerlink" title="防御措施"></a>防御措施</h3><p>对于检测到的超时的ICMP报文或UDP报文，或者目的端口不可达的报文给予丢弃处理。</p>
+<h1 id="四-URPF"><a href="#四-URPF" class="headerlink" title="四.URPF"></a>四.URPF</h1><h2 id="1-URPF技术"><a href="#1-URPF技术" class="headerlink" title="1.URPF技术"></a>1.URPF技术</h2><p>URPF技术：单播逆向路径转发的简称，其主要功能是防止基于源地址欺骗的网络攻击行为。有两种模式</p>
+<p>严格模式：X访问Y，路由器从ETH1口收到报文，路由表可以查到Y的路由，并且路由表反向查询也有X的路由，并且X的路由也是通过入接口ETH1口学到的。<br>松散模式：X访问Y，路由器从ETH1口收到报文，路由表可以查到Y的路由，并且路由表反向查询也有X的路由。</p>
+<h2 id="2-URPF处理流程图"><a href="#2-URPF处理流程图" class="headerlink" title="2.URPF处理流程图"></a>2.URPF处理流程图</h2><p>URPF的处理流程如下：</p>
+<p>如果报文的源地址在USG的FIB表中存在。<br>如果报文的源地址在USG的FIB表中不存在，则检查缺省路由及URPF的allow-default-route参数。</p>
+
+      <div class="tags">
+          <a href="/lx.blogs/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" rel="tag"><i class="ic i-tag"></i> 网络安全</a>
+          <a href="/lx.blogs/tags/%E6%94%BB%E5%87%BB/" rel="tag"><i class="ic i-tag"></i> 攻击</a>
+          <a href="/lx.blogs/tags/%E9%98%B2%E5%BE%A1/" rel="tag"><i class="ic i-tag"></i> 防御</a>
+          <a href="/lx.blogs/tags/%E5%8D%95%E5%8C%85%E6%94%BB%E5%87%BB/" rel="tag"><i class="ic i-tag"></i> 单包攻击</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2025-11-24 14:35:25" itemprop="dateModified" datetime="2025-11-24T14:35:25+08:00">2025-11-24</time>
+  </span>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>lx_love <i class="ic i-at"><em>@</em></i>lx blog
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="https://love-lx-love.github.io/lx.blogs/2025/11/24/25.11.24/" title="扫描窥探攻击、畸形报文攻击、特殊报文攻击">https://love-lx-love.github.io/lx.blogs/2025/11/24/25.11.24/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/lx.blogs/2025/11/23/hello-world/" itemprop="url" rel="prev" data-background-image="&#x2F;lx.blogs&#x2F;images&#x2F;bg&#x2F;4.jpg" title="Hello World">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> </span>
+  <h3>Hello World</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%89%AB%E6%8F%8F%E7%AA%A5%E6%8E%A2%E6%94%BB%E5%87%BB"><span class="toc-number">1.</span> <span class="toc-text">一、扫描窥探攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9C%B0%E5%9D%80%E6%89%AB%E6%8F%8F%E6%94%BB%E5%87%BB"><span class="toc-number">1.1.</span> <span class="toc-text">1.地址扫描攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD"><span class="toc-number">1.1.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E6%94%BB%E5%87%BB"><span class="toc-number">1.2.</span> <span class="toc-text">2.端口扫描攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%95%B8%E5%BD%A2%E6%8A%A5%E6%96%87%E6%94%BB%E5%87%BB"><span class="toc-number">2.</span> <span class="toc-text">二、畸形报文攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Sumrf%E6%94%BB%E5%87%BB"><span class="toc-number">2.1.</span> <span class="toc-text">1.Sumrf攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-2"><span class="toc-number">2.1.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-2"><span class="toc-number">2.1.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-LAND%E6%94%BB%E5%87%BB"><span class="toc-number">2.2.</span> <span class="toc-text">2.LAND攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-3"><span class="toc-number">2.2.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-3"><span class="toc-number">2.2.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Fraggle%E6%94%BB%E5%87%BB"><span class="toc-number">2.3.</span> <span class="toc-text">3.Fraggle攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-4"><span class="toc-number">2.3.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-4"><span class="toc-number">2.3.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-IP-Fragment%E6%94%BB%E5%87%BB"><span class="toc-number">2.4.</span> <span class="toc-text">4.IP Fragment攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-5"><span class="toc-number">2.4.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-5"><span class="toc-number">2.4.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-IP-Spoofing%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83"><span class="toc-number">2.5.</span> <span class="toc-text">5.IP Spoofing攻击防范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-6"><span class="toc-number">2.5.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-6"><span class="toc-number">2.5.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Ping-of-Death%E6%94%BB%E5%87%BB"><span class="toc-number">2.6.</span> <span class="toc-text">6.Ping of Death攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-7"><span class="toc-number">2.6.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-7"><span class="toc-number">2.6.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-TCP-Flag%E6%94%BB%E5%87%BB"><span class="toc-number">2.7.</span> <span class="toc-text">7.TCP Flag攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-8"><span class="toc-number">2.7.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-8"><span class="toc-number">2.7.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Teardrop%E6%94%BB%E5%87%BB"><span class="toc-number">2.8.</span> <span class="toc-text">8.Teardrop攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-9"><span class="toc-number">2.8.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-9"><span class="toc-number">2.8.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-WinNuke%E6%94%BB%E5%87%BB%E8%8C%83%E5%9B%B4%E9%98%B2%E8%8C%83"><span class="toc-number">2.9.</span> <span class="toc-text">9.WinNuke攻击范围防范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-10"><span class="toc-number">2.9.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-10"><span class="toc-number">2.9.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%89%B9%E6%AE%8A%E6%8A%A5%E6%96%87%E6%94%BB%E5%87%BB"><span class="toc-number">3.</span> <span class="toc-text">三、特殊报文攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%B6%85%E5%A4%A7ICMP%E6%8A%A5%E6%96%87%E6%94%BB%E5%87%BB"><span class="toc-number">3.1.</span> <span class="toc-text">1.超大ICMP报文攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-11"><span class="toc-number">3.1.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-11"><span class="toc-number">3.1.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-ICMP%E4%B8%8D%E5%8F%AF%E8%BE%BE%E6%8A%A5%E6%96%87%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83"><span class="toc-number">3.2.</span> <span class="toc-text">2.ICMP不可达报文攻击防范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-12"><span class="toc-number">3.2.1.</span> <span class="toc-text">攻击介绍</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Tracert%E6%8A%A5%E6%96%87%E6%94%BB%E5%87%BB%E9%98%B2%E8%8C%83"><span class="toc-number">3.3.</span> <span class="toc-text">3.Tracert报文攻击防范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E4%BB%8B%E7%BB%8D-13"><span class="toc-number">3.3.1.</span> <span class="toc-text">攻击介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1%E6%8E%AA%E6%96%BD-12"><span class="toc-number">3.3.2.</span> <span class="toc-text">防御措施</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B-URPF"><span class="toc-number">4.</span> <span class="toc-text">四.URPF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-URPF%E6%8A%80%E6%9C%AF"><span class="toc-number">4.1.</span> <span class="toc-text">1.URPF技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-URPF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">4.2.</span> <span class="toc-text">2.URPF处理流程图</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="lx_love"
+      data-src="/lx.blogs/images/avatar.jpg">
+  <p class="name" itemprop="name">lx_love</p>
+  <div class="description" itemprop="description">welcome to my blog</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/lx.blogs/archives/">
+        <span class="count">2</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/lx.blogs/tags/">
+        <span class="count">4</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/lx.blogs/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+</div>
+
+    <span><a href="/lx.blogs/2025/11/23/hello-world/" title="Hello World">Hello World</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+</div>
+
+    <span><a href="/lx.blogs/2025/11/24/25.11.24/" title="扫描窥探攻击、畸形报文攻击、特殊报文攻击">扫描窥探攻击、畸形报文攻击、特殊报文攻击</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">lx_love @ welcome to my blog</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2025/11/24/25.11.24/',
+    favicon: {
+      show: "（●´3｀●）やれやれだぜ",
+      hide: "(´Д｀)大変だ！"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/lx.blogs/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>
